@@ -22,6 +22,13 @@
 	// Keybindings
 	init_keybindings()
 
+	init_slapcraft_steps()
+	init_slapcraft_recipes()
+	init_curse_names()
+
+	init_orderless_slapcraft_recipes()
+	init_crafting_repeatable_recipes()
+
 	GLOB.emote_list = init_emote_list()
 
 	init_subtypes(/datum/crafting_recipe, GLOB.crafting_recipes)
@@ -43,6 +50,8 @@
 	// Patron Gods
 	for(var/path in subtypesof(/datum/patron))
 		var/datum/patron/patron = new path()
+		if(patron.non_faith)
+			continue
 		GLOB.patronlist[path] = patron
 		LAZYINITLIST(GLOB.patrons_by_faith[patron.associated_faith])
 		GLOB.patrons_by_faith[patron.associated_faith][path] = patron

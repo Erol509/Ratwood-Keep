@@ -95,10 +95,7 @@
 			if(-INFINITY to -5)
 				. += span_warning("<B>[t_He] look[p_s()] much weaker than I.</B>")
 
-	if(Adjacent(user))
-		if(has_simple_wounds)
-			. += "<a href='?src=[REF(src)];inspect_animal=1'>Inspect Wounds</a>"
-		if(user != src)
-			. += "<a href='?src=[REF(src)];check_hb=1'>Check Heartbeat</a>"
+	if(Adjacent(user) && HAS_TRAIT(src, TRAIT_SIMPLE_WOUNDS))
+		. += "<a href='byond://?src=[REF(src)];inspect_animal=1'>Inspect Wounds</a>"
 
 	. += "✠ ------------ ✠</span>"

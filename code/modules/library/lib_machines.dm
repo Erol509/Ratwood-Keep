@@ -513,14 +513,45 @@ GLOBAL_LIST(cachedbooks) // List of our cached book datums
 	else
 		return ..()
 
-/obj/machinery/libraryscanner/attack_hand(mob/user)
-	. = ..()
-	if(.)
-		return
-	usr.set_machine(src)
-	var/dat = "" // <META HTTP-EQUIV='Refresh' CONTENT='10'>
-	if(cache)
-		dat += "<FONT color=#005500>Data stored in memory.</FONT><BR>"
+	qdel(query_print_manuscript)
+
+/obj/machinery/printingpress/proc/choose_search_parameters(mob/user)
+	var/search_title = input(user, "Enter the title (optional):") as text|null
+	var/search_author = input(user, "Enter the author (optional):") as text|null
+	var/search_category = input(user, "Select a category (optional):") in list("Any", "Myths & Tales", "Legends & Accounts", "Thesis", "Eoratica") // Removed "Apocrypha & Grimoires"
+	// Pass the selected parameters to search_manuscripts
+	search_manuscripts(user, search_title, search_author, search_category)
+
+/obj/machinery/printingpress/proc/search_manuscripts(mob/user, search_title, search_author, search_category)
+	var/list/params = list()
+	var/sqlquery = "SELECT id, author, title, category FROM library WHERE deleted <> 1 AND approved = 1 AND category != 'Apocrypha & Grimoires'" // Exclude forbidden category
+
+	if (search_author && search_author != "")
+		sqlquery += " AND author LIKE :author"
+		params["author"] = "%" + search_author + "%"
+	if (search_title && search_title != "")
+		sqlquery += " AND title LIKE :title"
+		params["title"] = "%" + search_title + "%"
+	if (search_category && search_category != "Any")
+		sqlquery += " AND category = :category"
+		params["category"] = search_category
+
+	var/datum/DBQuery/query_search_manuscripts = SSdbcore.NewQuery(sqlquery, params)
+
+	var/dat = "<h3>Manuscript Search Results:</h3><br>"
+	dat += "<table><tr><th>Author</th><th>Title</th><th>Category</th><th>Print</th></tr>"
+
+	if (query_search_manuscripts.Execute())
+		var/has_results = FALSE
+		while (query_search_manuscripts.NextRow())
+			has_results = TRUE
+			var/id = query_search_manuscripts.item[1]
+			var/author = query_search_manuscripts.item[2]
+			var/title = query_search_manuscripts.item[3]
+			var/category = query_search_manuscripts.item[4]
+			dat += "<tr><td>[html_encode(author)]</td><td>[html_encode(title)]</td><td>[html_encode(category)]</td><td><a href='byond://?src=[REF(src)];print=1;id=[id]'>Print</a></td></tr>"
+		if (!has_results)
+			dat += "<tr><td colspan='4'>No results found.</td></tr>"
 	else
 		dat += "No data stored in memory.<BR>"
 	dat += "<A href='?src=[REF(src)];scan=1'>\[Scan\]</A>"

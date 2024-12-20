@@ -26,7 +26,7 @@
 						. += span_warning("It's a little damaged.")
 
 //	if(has_inspect_verb || (obj_integrity < max_integrity))
-//		. += span_notice("<a href='?src=[REF(src)];inspect=1'>Inspect</a>")
+//		. += "<span class='notice'><a href='byond://?src=[REF(src)];inspect=1'>Inspect</a></span>"
 
 	var/real_value = get_real_price()
 	if(real_value > 0)
@@ -51,11 +51,19 @@
 		if(resistance_flags & FREEZE_PROOF)
 			. += span_warning("[src] is made of cold-resistant materials.")
 		if(resistance_flags & FIRE_PROOF)
-			. += span_warning("[src] is made of fire-retardant materials.")
-
-	// Examines for weaknesses
-	if(resistance_flags & FLAMMABLE)
-		. += span_warning("[src] looks pretty flammable.")
+			. += "[src] is made of fire-retardant materials."
+*/
+// Only show if it's actually useable as bait, so that it doesn't show up on every single item of the game.
+	if(isbait)
+		var/baitquality = ""
+		switch(baitpenalty)
+			if(0)
+				baitquality = "excellent"
+			if(5)
+				baitquality = "good"
+			if(10)
+				baitquality = "passable"
+		. += "<span class='info'>It is \a [baitquality] bait for fish.</span>"
 
 	for(var/datum/examine_effect/E in examine_effects)
 		E.trigger(user)

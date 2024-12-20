@@ -471,74 +471,11 @@
 	verbage_simple = "put together"
 	verbage = "puts together"
 
-/datum/crafting_recipe/roguetown/paperscroll
-	name = "scroll of parchment (x5) - (small log, water; DRYING RACK; KNIFE; BEGINNER)"
-	result = list(/obj/item/paper/scroll,
-				  /obj/item/paper/scroll,
-				  /obj/item/paper/scroll,
-				  /obj/item/paper/scroll,
-				  /obj/item/paper/scroll)
-	reqs = list(/obj/item/grown/log/tree/small = 1,
-				/datum/reagent/water = 50)
-	tools = list(/obj/item/rogueweapon/huntingknife = 1)
-	structurecraft = /obj/machinery/tanningrack
-	skill_level = 1
-
-/datum/crafting_recipe/roguetown/parchment
-	name = "paper parchment (x8) - (small log, water; DRYING RACK; KNIFE; BEGINNER)"
-	result = list(/obj/item/paper,
-				  /obj/item/paper,
-				  /obj/item/paper,
-				  /obj/item/paper,
-				  /obj/item/paper,
-				  /obj/item/paper,
-				  /obj/item/paper,
-				  /obj/item/paper)
-	reqs = list(/obj/item/grown/log/tree/small = 1,
-				/datum/reagent/water = 30)
-	tools = list(/obj/item/rogueweapon/huntingknife = 1)
-	structurecraft = /obj/machinery/tanningrack
-	skill_level = 1
-
-
-/datum/crafting_recipe/roguetown/briarmask
-	name = "briarmask - (4 sticks, 3 fibers; COMPETENT)"
-	result = /obj/item/clothing/head/roguetown/dendormask
-	reqs = list(/obj/item/grown/log/tree/stick = 4,
-				/obj/item/natural/fibers = 3)
-	skillcraft = /datum/skill/magic/druidic
-	skill_level = 2 // druids & dendor clerics can craft
-
-// Woodcutting recipe
-
-/datum/crafting_recipe/roguetown/lumberjacking
-	skillcraft = /datum/skill/labor/lumberjacking
-	tools = list(/obj/item/rogueweapon/huntingknife = 1)
-
-/datum/crafting_recipe/roguetown/lumberjacking/cart_upgrade
-	name = "upgrade cog - (2 small logs, stone; KNIFE; COMPETENT)"
-	result = /obj/item/roguegear/wood/basic
-	reqs = list(/obj/item/grown/log/tree/small = 2,
-				/obj/item/natural/stone = 1)
-	skill_level = 2
-
-/datum/crafting_recipe/roguetown/sawedoff
-	name = "handgonne - (arquebus rifle; SURGERY SAW; NONE)"
-	result = /obj/item/gun/ballistic/firearm/handgonne
-	reqs = list(/obj/item/gun/ballistic/firearm/arquebus = 1)
-	skill_level = 0
-	tools = list(/obj/item/rogueweapon/surgery/saw = 1)
-
-
-// Blacksmithing Recipes
-
-/datum/crafting_recipe/roguetown/gorget/oring
-	name = "ringed gorget - (iron gorget; HAMMER; COMPETENT)"
-	skillcraft = /datum/skill/craft/blacksmithing
-	reqs = list(/obj/item/clothing/neck/roguetown/gorget = 1)
-	result = /obj/item/clothing/neck/roguetown/gorget/oring
-	skill_level = 2
-	tools = list(/obj/item/rogueweapon/hammer = 1)
+/datum/crafting_recipe/roguetown/readingscroll
+	name = "novice's guide to literature"
+	result = list(/obj/item/literary)
+	reqs = list(/obj/item/paper/scroll = 5)
+	tools = list(/obj/item/natural/feather)
 	req_table = TRUE
 
 /datum/crafting_recipe/roguetown/gorget/soring

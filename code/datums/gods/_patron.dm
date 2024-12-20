@@ -32,8 +32,10 @@ GLOBAL_LIST_EMPTY(preference_patrons)
 	var/t2
 	/// Tier 3 spell
 	var/t3
-	/// Final tier spell
-	var/t4
+
+	///our traits thats applied by set_patron and removed when changed
+	var/list/added_traits
+	var/non_faith = FALSE
 
 /datum/patron/proc/on_gain(mob/living/pious)
 	for(var/trait in mob_traits)

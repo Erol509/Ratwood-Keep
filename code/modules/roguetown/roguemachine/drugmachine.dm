@@ -157,30 +157,27 @@
 	return attack_hand(usr)
 
 /obj/structure/roguemachine/drugmachine/attack_hand(mob/living/user)
-    . = ..()
-    if(.)
-        return
-    if(!ishuman(user))
-        return
-    if(locked)
-        return
-    user.changeNext_move(CLICK_CD_MELEE)
-    playsound(loc, 'sound/misc/beep.ogg', 100, FALSE, -1)
-    var/canread = user.can_read(src, TRUE)
-    var/contents
-    if(canread)
-        contents = "<center>PURITY - In the name of pleasure.<BR>"
-        contents += "<a href='?src=[REF(src)];change=1'>MAMMON LOADED:</a> [budget]<BR>"
-    else
-        contents = "<center>[stars("PURITY - In the name of pleasure.")]<BR>"
-        contents += "<a href='?src=[REF(src)];change=1'>[stars("MAMMON LOADED:")]</a> [budget]<BR>"
+	. = ..()
+	if(.)
+		return
+	if(!ishuman(user))
+		return
+	if(locked)
+		to_chat(user, "<span class='warning'>It's locked. Of course.</span>")
+		return
+	user.changeNext_move(CLICK_CD_MELEE)
+	playsound(loc, 'sound/misc/beep.ogg', 100, FALSE, -1)
+	var/canread = user.can_read(src, TRUE)
+	var/contents
+	contents = "<center>PURITY - In the pursuit of pleasure.<BR>"
+	contents += "<a href='byond://?src=[REF(src)];change=1'>MAMMON LOADED:</a> [budget]<BR>"
 
-    var/mob/living/carbon/human/H = user
-    if(H.job == "Nightmaster")
-        if(canread)
-            contents += "<a href='?src=[REF(src)];secrets=1'>Secrets</a><BR>"
-        else
-            contents += "<a href='?src=[REF(src)];secrets=1'>[stars("Secrets")]</a><BR>"
+	var/mob/living/carbon/human/H = user
+	if(H.job == "Niteman")
+		if(canread)
+			contents += "<a href='byond://?src=[REF(src)];secrets=1'>Secrets</a>"
+		else
+			contents += "<a href='byond://?src=[REF(src)];secrets=1'>[stars("Secrets")]</a>"
 
     // Dynamically generate item prices based on tax flag
     for(var/I in held_items)
@@ -189,9 +186,25 @@
         var/full_price = price + tax_amt
         var/namer = held_items[I]["NAME"]
 
-        // Apply tax exemption if the flag is set
-        if(drugrade_flags & DRUGRADE_NOTAX)
-            full_price = price
+	var/list/unlocked_cats = list("Narcotics","Instruments")
+	if(current_cat == "1")
+		contents += "<center>"
+		for(var/X in unlocked_cats)
+			contents += "<a href='byond://?src=[REF(src)];changecat=[X]'>[X]</a><BR>"
+		contents += "</center>"
+	else
+		contents += "<center>[current_cat]<BR></center>"
+		contents += "<center><a href='byond://?src=[REF(src)];changecat=1'>\[RETURN\]</a><BR><BR></center>"
+		var/list/pax = list()
+		for(var/pack in SSmerchant.supply_packs)
+			var/datum/supply_pack/PA = SSmerchant.supply_packs[pack]
+			if(PA.group == current_cat)
+				pax += PA
+		for(var/datum/supply_pack/PA in sortList(pax))
+			var/costy = PA.cost
+			if(!(upgrade_flags & UPGRADE_NOTAX))
+				costy=round(costy+(SStreasury.tax_value * costy))
+			contents += "[PA.name] - ([costy])<a href='byond://?src=[REF(src)];buy=[PA.type]'>BUY</a><BR>"
 
         if(!namer)
             held_items[I]["NAME"] = "thing"

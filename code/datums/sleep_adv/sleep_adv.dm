@@ -143,13 +143,19 @@
 		var/can_buy = can_buy_skill(skill_type)
 		var/next_level = get_next_level_for_skill(skill_type)
 		var/level_name = SSskills.level_names[next_level]
-		dat += "<br><a [can_buy ? "" : "class='linkOff'"] href='?src=[REF(src)];task=buy_skill;skill_type=[skill_type]'>[skill.name] ([level_name])</a> - \Roman[get_skill_cost(skill_type)]"
+		dat += "<div class='class_bar_div'><a class='vagrant' [can_buy ? "" : "class='linkOff'"] href='byond://?src=[REF(src)];task=buy_skill;skill_type=[skill_type]'>[skill.name] ([level_name])><img class='ninetysskull' src='gragstar.gif' width=32 height=32>\Roman[get_skill_cost(skill_type)]</span><img class='ninetysskull' src='gragstar.gif' width=32 height=32></a></div>"
 	dat += "<br>"
 	if(rolled_specials > 0)
 		var/can_buy = can_buy_special()
-		dat += "<br><a [can_buy ? "" : "class='linkOff'"] href='?src=[REF(src)];task=buy_special'>Dream something <b>special</b></a> - \Roman[get_special_cost()]"
+		dat += "<div class='class_bar_div'><a class='vagrant' [can_buy ? "" : "class='linkOff'"] href='byond://?src=[REF(src)];task=buy_special'>>Dream something <b>special</b></a>><img class='ninetysskull' src='gragstar.gif' width=32 height=32>\Roman[get_special_cost()]</span><img class='ninetysskull' src='gragstar.gif' width=32 height=32></a></div>"
+		dat += "<br><a [can_buy ? "" : "class='linkOff'"] href='byond://?src=[REF(src)];task=buy_special'>Dream something <b>special</b></a> - \Roman[get_special_cost()]"
 		dat += "<br>Specials can have negative or positive effects"
-	dat += "<br><br><center>Your points will be retained<br><a href='?src=[REF(src)];task=continue'>Continue</a></center>"
+	dat += "<div class='footer'>"
+	dat += "<br><br><center>Your points will be retained<br><a href='byond://?src=[REF(src)];task=continue'>Continue</a></center>"
+	dat += {"
+		</body>
+	</html>
+	"}
 	var/datum/browser/popup = new(user, "dreams", "<center>Dreams</center>", 350, 450)
 	popup.set_window_options("can_close=0")
 	popup.set_content(dat.Join())
